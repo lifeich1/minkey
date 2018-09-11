@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+# vim: filetype=python
+
+import getpass
+import sys
+import md5
+
+if len(sys.argv) != 2:
+    print '''./mkey <num>
+    enter <num> tokens to generate password '''
+    exit(0)
+
+n = int(sys.argv[1])
+
+if n <= 0:
+    print 'argument too small'
+    exit(1)
+
+if n > 10:
+    print 'argument too large'
+    exit(1)
+
+h = md5.md5()
+
+for i in xrange(n):
+    p = getpass.getpass('- enter part ' + str(i + 1) + ': ')
+    h.update(p)
+    if i < n - 1:
+        h.update('-')
+h.update('\n')
+
+print '+ result:', h.hexdigest()
